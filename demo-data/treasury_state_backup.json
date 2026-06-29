@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "company": "Meridian Capital Partners",
+    "type": "Private Equity — Multi-Entity Treasury",
+    "base_currency": "USD",
+    "updated_at": "2026-06-28T14:00:00Z",
+    "agent_status": "active",
+    "yield_protocol": "Stripe Treasury — USDC Lending (Aave Arc)",
+    "apy": 0.0485,
+    "apy_7d_avg": 0.0482,
+    "apy_30d_avg": 0.0471,
+    "total_yield_earned_30d": 8217.43,
+    "total_yield_earned_ytd": 49832.18,
+    "fiscal_year_start": "2026-01-01",
+    "entities_count": 3,
+    "currencies": ["USD", "EUR", "GBP"],
+    "agent_version": "2.0.0",
+    "nemoclaw_version": "1.0.0-alpha",
+    "nemotron_model": "nvidia/nemotron-3-ultra-550b"
+  },
+  "entities": [
+    { 
+      "id": "ent-001", 
+      "name": "Meridian Fund I LP", 
+      "currency": "USD", 
+      "type": "fund",
+      "role": "Primary investment vehicle — USD-denominated capital pool",
+      "aum": 1885000,
+      "established": "2024-03-15",
+      "lp_count": 47,
+      "commitments_total": 25000000,
+      "deployed_capital": 18750000,
+      "undrawn_capital": 6250000
+    },
+    { 
+      "id": "ent-002", 
+      "name": "Meridian Holdings Ltd", 
+      "currency": "EUR", 
+      "type": "holding",
+      "role": "European holding company — EUR-denominated operating entity",
+      "aum": 842000,
+      "established": "2024-09-01",
+      "subsidiaries": 3,
+      "jurisdiction": "Luxembourg"
+    },
+    { 
+      "id": "ent-003", 
+      "name": "Meridian Ops UK", 
+      "currency": "GBP", 
+      "type": "operating",
+      "role": "UK operating entity — payroll, expenses, office",
+      "aum": 278000,
+      "established": "2024-06-01",
+      "headcount": 28,
+      "monthly_burn": 58000,
+      "jurisdiction": "United Kingdom"
+    }
+  ],
+  "balances": {
+    "ent-001": {
+      "USD": { "fiat": 185000.00, "stablecoin": 420000.00, "yield": 1280000.00 },
+      "EUR": { "fiat": 0, "stablecoin": 0, "yield": 0 },
+      "GBP": { "fiat": 0, "stablecoin": 0, "yield": 0 }
+    },
+    "ent-002": {
+      "USD": { "fiat": 0, "stablecoin": 0, "yield": 0 },
+      "EUR": { "fiat": 92000.00, "stablecoin": 210000.00, "yield": 540000.00 },
+      "GBP": { "fiat": 0, "stablecoin": 0, "yield": 0 }
+    },
+    "ent-003": {
+      "USD": { "fiat": 0, "stablecoin": 0, "yield": 0 },
+      "EUR": { "fiat": 0, "stablecoin": 0, "yield": 0 },
+      "GBP": { "fiat": 38000.00, "stablecoin": 75000.00, "yield": 165000.00 }
+    }
+  },
+  "liquidity_buffer": {
+    "ent-001": { "currency": "USD", "min_buffer": 50000.00, "sweep_threshold": 100000.00, "policy": "Maintain $50K minimum fiat for operational expenses. Sweep excess above $100K to yield." },
+    "ent-002": { "currency": "EUR", "min_buffer": 25000.00, "sweep_threshold": 60000.00, "policy": "Maintain €25K for EU operating costs. Sweep excess above €60K." },
+    "ent-003": { "currency": "GBP", "min_buffer": 15000.00, "sweep_threshold": 30000.00, "policy": "Maintain £15K for UK payroll buffer. Sweep excess above £30K." }
+  },
+  "schedule": [
+    { "id": "sch-001", "entity": "ent-003", "title": "Payroll — June (28 staff)", "amount": 42000, "currency": "GBP", "due": "2026-06-28", "type": "payroll", "status": "due", "recurring": "monthly", "payee": "PayCircle (Gusto UK)", "auto_execute": true },
+    { "id": "sch-002", "entity": "ent-002", "title": "Office Lease — Luxembourg (July)", "amount": 18000, "currency": "EUR", "due": "2026-07-01", "type": "expense", "status": "upcoming", "recurring": "monthly", "payee": "Regus Luxembourg City", "auto_execute": true },
+    { "id": "sch-003", "entity": "ent-001", "title": "Portfolio Co. — Bridge Loan Repayment (Helix Bio)", "amount": 250000, "currency": "USD", "due": "2026-07-05", "type": "loan", "status": "upcoming", "recurring": "one-time", "payee": "Helix BioSciences Inc.", "auto_execute": false, "requires_approval": true },
+    { "id": "sch-004", "entity": "ent-001", "title": "LP Distribution Q2 — Carry Split", "amount": 450000, "currency": "USD", "due": "2026-07-10", "type": "distribution", "status": "upcoming", "recurring": "quarterly", "payee": "47 LPs (pro-rata)", "auto_execute": false, "requires_approval": true },
+    { "id": "sch-005", "entity": "ent-003", "title": "Corporation Tax Q2 (HMRC)", "amount": 28000, "currency": "GBP", "due": "2026-07-15", "type": "tax", "status": "upcoming", "recurring": "quarterly", "payee": "HM Revenue & Customs", "auto_execute": true },
+    { "id": "sch-006", "entity": "ent-002", "title": "Performance Bonus Pool (12 staff)", "amount": 85000, "currency": "EUR", "due": "2026-07-20", "type": "bonus", "status": "upcoming", "recurring": "annual", "payee": "Staff (12 individuals)", "auto_execute": false, "requires_approval": true },
+    { "id": "sch-007", "entity": "ent-001", "title": "SaaS Subscriptions — July bundle", "amount": 4200, "currency": "USD", "due": "2026-07-01", "type": "expense", "status": "upcoming", "recurring": "monthly", "payee": "Bloomberg Terminal, AlphaSense, Notion, Vercel, Neon", "auto_execute": true, "provision_via": "stripe-projects" },
+    { "id": "sch-008", "entity": "ent-003", "title": "Payroll — July (28 staff)", "amount": 42000, "currency": "GBP", "due": "2026-07-28", "type": "payroll", "status": "upcoming", "recurring": "monthly", "payee": "PayCircle (Gusto UK)", "auto_execute": true },
+    { "id": "sch-009", "entity": "ent-002", "title": "Incoming — Management Fees Q3 (2% on €15.5M AUM)", "amount": 310000, "currency": "EUR", "due": "2026-07-01", "type": "incoming", "status": "upcoming", "recurring": "quarterly", "source": "47 LPs (pro-rata)", "auto_convert": "60% to USDC for yield" },
+    { "id": "sch-010", "entity": "ent-001", "title": "Incoming — Capital Call LP-047 (Series B commitment)", "amount": 750000, "currency": "USD", "due": "2026-07-08", "type": "incoming", "status": "upcoming", "recurring": "one-time", "source": "LP-047 (Wellington Family Office)", "auto_convert": "100% to USDC" },
+    { "id": "sch-011", "entity": "ent-003", "title": "Employer NI Contributions — June", "amount": 6300, "currency": "GBP", "due": "2026-06-28", "type": "tax", "status": "due", "recurring": "monthly", "payee": "HM Revenue & Customs", "auto_execute": true },
+    { "id": "sch-012", "entity": "ent-001", "title": "Audit Fee — Q2 (Deloitte)", "amount": 35000, "currency": "USD", "due": "2026-07-25", "type": "expense", "status": "upcoming", "recurring": "quarterly", "payee": "Deloitte LLP", "auto_execute": true, "payment_method": "stripe-link-virtual-card" }
+  ],
+  "transactions": [
+    { "id": "tx-1001", "timestamp": "2026-06-27T09:15:00Z", "entity": "ent-001", "type": "yield_sweep", "description": "Swept $135K USD fiat to yield (above $100K threshold). Routed via Stripe Treasury → USDC → Aave Arc.", "amount": -135000, "currency": "USD", "from": "fiat", "to": "yield", "status": "completed", "nemoclaw_hash": "a3f8c91d2e7b", "nemoclaw_status": "approved", "nemoclaw_warnings": [] },
+    { "id": "tx-1002", "timestamp": "2026-06-27T09:15:00Z", "entity": "ent-001", "type": "yield_sweep", "description": "Swept $80K USDC stablecoin to yield (above 1.5x threshold). Converted via Stripe onramp.", "amount": -80000, "currency": "USD", "from": "stablecoin", "to": "yield", "status": "completed", "nemoclaw_hash": "b7e2f04a1c9d", "nemoclaw_status": "approved", "nemoclaw_warnings": [] },
+    { "id": "tx-1003", "timestamp": "2026-06-26T14:30:00Z", "entity": "ent-002", "type": "conversion", "description": "EUR→USDC conversion for yield optimization. Rate: 1 EUR = 1.082 USD. Settled via Stripe FX.", "amount": -50000, "currency": "EUR", "from": "fiat", "to": "stablecoin", "status": "completed", "rate": "1 EUR = 1.082 USD", "nemoclaw_hash": "c1d5e83b4f6a", "nemoclaw_status": "approved", "nemoclaw_warnings": ["off-hours: monitored"] },
+    { "id": "tx-1004", "timestamp": "2026-06-25T08:00:00Z", "entity": "ent-003", "type": "incoming", "description": "Client retainer received — Q3 advisory engagement (Aurora Capital).", "amount": 15000, "currency": "GBP", "from": "external", "to": "fiat", "status": "completed", "nemoclaw_hash": "d9a3f7c2e1b4", "nemoclaw_status": "approved", "nemoclaw_warnings": [] },
+    { "id": "tx-1005", "timestamp": "2026-06-24T11:45:00Z", "entity": "ent-001", "type": "yield_earnings", "description": "Daily yield accrual — 4.85% APY on $1.28M yield balance. Auto-compounded.", "amount": 169.86, "currency": "USD", "from": "yield", "to": "yield", "status": "completed", "nemoclaw_hash": "auto-daily", "nemoclaw_status": "auto", "nemoclaw_warnings": [] },
+    { "id": "tx-1006", "timestamp": "2026-06-24T11:45:00Z", "entity": "ent-002", "type": "yield_earnings", "description": "Daily yield accrual — 4.85% APY on €540K yield balance. Auto-compounded.", "amount": 71.74, "currency": "EUR", "from": "yield", "to": "yield", "status": "completed", "nemoclaw_hash": "auto-daily", "nemoclaw_status": "auto", "nemoclaw_warnings": [] },
+    { "id": "tx-1007", "timestamp": "2026-06-24T11:45:00Z", "entity": "ent-003", "type": "yield_earnings", "description": "Daily yield accrual — 4.85% APY on £165K yield balance. Auto-compounded.", "amount": 21.92, "currency": "GBP", "from": "yield", "to": "yield", "status": "completed", "nemoclaw_hash": "auto-daily", "nemoclaw_status": "auto", "nemoclaw_warnings": [] },
+    { "id": "tx-1008", "timestamp": "2026-06-23T16:20:00Z", "entity": "ent-003", "type": "payment", "description": "Office supplies — Amazon Business UK. Paid via Stripe Link virtual card (one-time use).", "amount": -2340.50, "currency": "GBP", "from": "stablecoin", "to": "external", "status": "completed", "nemoclaw_hash": "e4b7c1d9f3a2", "nemoclaw_status": "approved", "nemoclaw_warnings": [], "payment_method": "stripe-link-virtual-card" },
+    { "id": "tx-1009", "timestamp": "2026-06-22T10:00:00Z", "entity": "ent-001", "type": "incoming", "description": "Capital call — LP-046 (BlackRock Multi-Strategy). Wire received.", "amount": 500000, "currency": "USD", "from": "external", "to": "fiat", "status": "completed", "nemoclaw_hash": "f2c8d6e4b1a7", "nemoclaw_status": "approved", "nemoclaw_warnings": [] },
+    { "id": "tx-1010", "timestamp": "2026-06-22T10:05:00Z", "entity": "ent-001", "type": "conversion", "description": "Auto-convert incoming USD to USDC. 100% of capital call proceeds → stablecoin for yield.", "amount": -500000, "currency": "USD", "from": "fiat", "to": "stablecoin", "status": "completed", "rate": "1 USD = 1.00 USDC", "nemoclaw_hash": "a1d5e9c3f8b4", "nemoclaw_status": "approved", "nemoclaw_warnings": ["large-tx: flagged for review"] },
+    { "id": "tx-1011", "timestamp": "2026-06-21T12:00:00Z", "entity": "ent-001", "type": "payment", "description": "Bloomberg Terminal subscription — June. Paid via Stripe Link SPT (recurring).", "amount": -2400, "currency": "USD", "from": "stablecoin", "to": "external", "status": "completed", "nemoclaw_hash": "b9e4f7a2c1d3", "nemoclaw_status": "approved", "nemoclaw_warnings": [], "payment_method": "stripe-link-spt" },
+    { "id": "tx-1012", "timestamp": "2026-06-20T09:30:00Z", "entity": "ent-002", "type": "payment", "description": "Legal fees — Linklaters (Helix Bio acquisition DD). Invoice #INV-2026-0847.", "amount": -45000, "currency": "EUR", "from": "fiat", "to": "external", "status": "completed", "nemoclaw_hash": "c3a7e1f9d4b8", "nemoclaw_status": "approved", "nemoclaw_warnings": ["large-tx: flagged for review"] },
+    { "id": "tx-1013", "timestamp": "2026-06-19T14:00:00Z", "entity": "ent-001", "type": "yield_sweep", "description": "Swept $200K USDC to yield (capital call proceeds, post-conversion).", "amount": -200000, "currency": "USD", "from": "stablecoin", "to": "yield", "status": "completed", "nemoclaw_hash": "d8b4c6e2a1f7", "nemoclaw_status": "approved", "nemoclaw_warnings": [] },
+    { "id": "tx-1014", "timestamp": "2026-06-18T11:00:00Z", "entity": "ent-003", "type": "payment", "description": "Payroll — May (28 staff). Paid via PayCircle (Gusto UK) batch transfer.", "amount": -41500, "currency": "GBP", "from": "fiat", "to": "external", "status": "completed", "nemoclaw_hash": "e7f3a9c1d5b2", "nemoclaw_status": "approved", "nemoclaw_warnings": [], "payee": "PayCircle" },
+    { "id": "tx-1015", "timestamp": "2026-06-17T08:00:00Z", "entity": "ent-003", "type": "incoming", "description": "R&D Tax Credit — HMRC (Q1 claim).", "amount": 18400, "currency": "GBP", "from": "external", "to": "fiat", "status": "completed", "nemoclaw_hash": "f4b8d6e3a1c7", "nemoclaw_status": "approved", "nemoclaw_warnings": [] }
+  ],
+  "yield_history": [
+    { "date": "2026-06-22", "apy": 0.0485, "daily_earnings_usd": 275.56, "total_yield_usd": 2073830.00 },
+    { "date": "2026-06-23", "apy": 0.0485, "daily_earnings_usd": 275.56, "total_yield_usd": 2074105.56 },
+    { "date": "2026-06-24", "apy": 0.0485, "daily_earnings_usd": 275.56, "total_yield_usd": 2074381.12 },
+    { "date": "2026-06-25", "apy": 0.0484, "daily_earnings_usd": 275.00, "total_yield_usd": 2074656.12 },
+    { "date": "2026-06-26", "apy": 0.0483, "daily_earnings_usd": 274.43, "total_yield_usd": 2074930.55 },
+    { "date": "2026-06-27", "apy": 0.0485, "daily_earnings_usd": 275.56, "total_yield_usd": 2075206.11 },
+    { "date": "2026-06-28", "apy": 0.0485, "daily_earnings_usd": 275.56, "total_yield_usd": 2075481.67 }
+  ],
+  "agent_log": [
+    { "id": "log-001", "timestamp": "2026-06-28T14:00:00Z", "type": "info", "message": "Treasury agent v2.0.0 active. Monitoring 3 entities across 3 currencies (USD/EUR/GBP). Total AUM: $3.15M. NemoClaw v1.0.0-alpha safety engine online. Nemotron 3 Ultra inference routing configured." },
+    { "id": "log-002", "timestamp": "2026-06-27T09:15:00Z", "type": "action", "message": "Swept $135K USD fiat + $80K USDC from Meridian Fund I to yield. Retained $50K liquidity buffer. NemoClaw: all checks passed. Audit: a3f8c91d2e7b, b7e2f04a1c9d." },
+    { "id": "log-003", "timestamp": "2026-06-26T14:30:00Z", "type": "action", "message": "Converted €50K to USDC for yield optimization. EUR fiat balance was 3.6x above buffer threshold. NemoClaw: off-hours monitored. Audit: c1d5e83b4f6a." },
+    { "id": "log-004", "timestamp": "2026-06-26T08:00:00Z", "type": "forecast", "message": "Liquidity forecast: Payroll £42K due Jun 28 (today). Current GBP fiat: £38K. Will need to pull £4K from stablecoin before EOD. Auto-queued." },
+    { "id": "log-005", "timestamp": "2026-06-25T17:00:00Z", "type": "info", "message": "Incoming €310K management fees (Q3) scheduled for Jul 1. Will auto-convert 60% to USDC for yield, retain €124K for Jul obligations." },
+    { "id": "log-006", "timestamp": "2026-06-24T11:45:00Z", "type": "info", "message": "Daily yield accrual across 3 entities: $263.52 total ($169.86 + €71.74 + £21.92). 30-day yield earnings: $8,217.43. YTD: $49,832.18." },
+    { "id": "log-007", "timestamp": "2026-06-22T10:05:00Z", "type": "action", "message": "Auto-converted $500K capital call proceeds (LP-046) to USDC. NemoClaw: large-tx flagged for review. 100% routed to stablecoin per fund policy. Audit: a1d5e9c3f8b4." },
+    { "id": "log-008", "timestamp": "2026-06-21T12:00:00Z", "type": "action", "message": "Bloomberg Terminal subscription paid via Stripe Link SPT ($2,400). Recurring monthly. NemoClaw: approved. Audit: b9e4f7a2c1d3." },
+    { "id": "log-009", "timestamp": "2026-06-20T09:30:00Z", "type": "action", "message": "Legal fees paid to Linklaters (€45K) for Helix Bio acquisition DD. NemoClaw: large-tx flagged. Invoice #INV-2026-0847. Audit: c3a7e1f9d4b8." },
+    { "id": "log-010", "timestamp": "2026-06-18T11:00:00Z", "type": "info", "message": "Payroll — May executed (28 staff, £41,500). Paid via PayCircle batch transfer. NemoClaw: approved." }
+  ]
+}
