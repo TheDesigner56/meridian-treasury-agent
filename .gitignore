@@ -28,3 +28,4 @@ Thumbs.db
 # Keep the demo state (needed for deployment)
 demo-data/treasury_state.json
 !demo-data/treasury_state_backup.json
+.vercel

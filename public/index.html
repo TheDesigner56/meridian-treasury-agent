@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian Treasury</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #191c1f;
+    --bg-card: #23262b;
+    --bg-card-hover: #2a2d33;
+    --bg-input: #2a2d33;
+    --text-primary: #f4f4f4;
+    --text-secondary: #a0a4a8;
+    --text-muted: #6b7075;
+    --accent: #494fdf;
+    --accent-hover: #5c5fea;
+    --success: #00a87e;
+    --danger: #e23b4a;
+    --warning: #ec7e00;
+    --border: #33363c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .num { font-variant-numeric: tabular-nums; }
+
+  .container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  .header { padding: 20px 0; }
+  .header-inner { display: flex; align-items: center; justify-content: space-between; }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .logo {
+    width: 36px; height: 36px; border-radius: 12px;
+    background: var(--accent); display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 18px; color: white;
+  }
+  .brand-name { font-size: 17px; font-weight: 600; }
+  .brand-sub { font-size: 13px; color: var(--text-muted); }
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border-radius: 9999px;
+    background: rgba(0, 168, 126, 0.1); color: var(--success);
+    font-size: 13px; font-weight: 500;
+  }
+  .status-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--success);
+  }
+
+  /* Hero balance card */
+  .hero-card {
+    background: var(--bg-card);
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 16px;
+  }
+  .hero-label { font-size: 14px; color: var(--text-muted); font-weight: 500; margin-bottom: 8px; }
+  .hero-balance { font-size: 44px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .hero-balance .cur { font-size: 24px; color: var(--text-secondary); font-weight: 500; }
+  .hero-sub { font-size: 14px; color: var(--text-secondary); }
+  .hero-sub .pos { color: var(--success); font-weight: 500; }
+
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    margin-top: 24px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .hero-stat-label { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-bottom: 4px; }
+  .hero-stat-value { font-size: 20px; font-weight: 600; }
+  .hero-stat-value.green { color: var(--success); }
+
+  /* Integration pills */
+  .integrations { display: flex; gap: 8px; margin-bottom: 20px; }
+  .int-pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 6px 14px; border-radius: 9999px;
+    background: var(--bg-card); font-size: 12px; font-weight: 500;
+    color: var(--text-secondary);
+  }
+  .int-pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .int-pill .dot.green { background: var(--success); }
+  .int-pill .dot.blue { background: var(--accent); }
+  .int-pill .dot.teal { background: var(--success); }
+
+  /* Main grid */
+  .main { display: grid; grid-template-columns: 340px 1fr 360px; gap: 16px; padding-bottom: 24px; }
+
+  /* Cards */
+  .card {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 20px;
+  }
+  .card-title {
+    font-size: 14px; font-weight: 600; color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+
+  /* Entity cards */
+  .entity {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 12px;
+    transition: background 0.15s;
+  }
+  .entity:hover { background: var(--bg-card-hover); }
+  .entity-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .entity-type {
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 3px 10px; border-radius: 9999px;
+    background: rgba(255,255,255,0.06); color: var(--text-secondary);
+  }
+  .entity-cur { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+  .entity-name { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+  .entity-role { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+  .entity-total { font-size: 28px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 12px; }
+  .entity-parts { display: flex; gap: 16px; font-size: 12px; color: var(--text-muted); margin-top: 14px; }
+  .entity-parts .v { font-weight: 600; color: var(--text-secondary); }
+  .entity-meta {
+    font-size: 12px; color: var(--text-muted); margin-top: 14px;
+    padding-top: 14px; border-top: 1px solid var(--border); line-height: 1.6;
+  }
+
+  /* Liquidity */
+  .liq-row { margin-bottom: 14px; }
+  .liq-row:last-child { margin-bottom: 0; }
+  .liq-top { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .liq-name { font-size: 14px; color: var(--text-secondary); }
+  .liq-status { font-size: 12px; font-weight: 600; }
+  .liq-bar { height: 4px; border-radius: 9999px; background: rgba(255,255,255,0.06); overflow: hidden; margin-bottom: 6px; }
+  .liq-fill { height: 100%; border-radius: 9999px; transition: width 0.4s; }
+  .liq-detail { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
+
+  /* Schedule */
+  .sched-tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+  .sched-tab {
+    font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 9999px;
+    color: var(--text-muted); cursor: pointer; border: none; background: transparent;
+    transition: all 0.15s; font-family: inherit;
+  }
+  .sched-tab:hover { color: var(--text-secondary); background: rgba(255,255,255,0.04); }
+  .sched-tab.active { color: var(--text-primary); background: rgba(255,255,255,0.08); }
+
+  .sched-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 14px; border-radius: 14px; margin-bottom: 4px;
+    transition: background 0.15s;
+  }
+  .sched-item:hover { background: rgba(255,255,255,0.03); }
+  .sched-item.due { background: rgba(229, 59, 74, 0.08); }
+  .sched-item.incoming { background: rgba(0, 168, 126, 0.06); }
+  .sched-icon {
+    width: 36px; height: 36px; border-radius: 12px;
+    background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: var(--text-secondary);
+  }
+  .sched-body { flex: 1; min-width: 0; }
+  .sched-title { font-size: 14px; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sched-meta { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+  .sched-right { text-align: right; flex-shrink: 0; min-width: 100px; }
+  .sched-amt { font-size: 15px; font-weight: 600; }
+  .sched-date { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .badge {
+    display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px;
+    border-radius: 9999px; margin-left: 8px; text-transform: uppercase; letter-spacing: 0.03em;
+  }
+  .badge-auto { background: rgba(0, 168, 126, 0.12); color: var(--success); }
+  .badge-approval { background: rgba(236, 126, 0, 0.12); color: var(--warning); }
+
+  /* Chat */
+  .chat {
+    display: flex; flex-direction: column; height: 500px;
+    background: var(--bg-card); border-radius: 20px; overflow: hidden;
+  }
+  .chat-head { padding: 16px 20px; display: flex; align-items: center; gap: 10px; }
+  .chat-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--accent); display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 14px; font-weight: 600;
+  }
+  .chat-name { font-size: 15px; font-weight: 600; }
+  .chat-status { font-size: 12px; color: var(--success); display: flex; align-items: center; gap: 5px; }
+  .chat-msgs { flex: 1; overflow-y: auto; padding: 8px 20px; }
+  .chat-msg { margin-bottom: 12px; font-size: 14px; line-height: 1.55; }
+  .chat-msg-agent {
+    background: rgba(73, 79, 223, 0.1); border-radius: 14px 14px 14px 4px;
+    padding: 12px 14px;
+  }
+  .chat-msg-user { text-align: right; color: var(--text-secondary); padding: 0 4px; }
+  .chat-msg-meta { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+  .chat-input-area { padding: 12px 16px 16px; }
+  .chat-input-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .chat-input {
+    flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 14px;
+    padding: 12px 16px; color: var(--text-primary); font-size: 14px;
+    font-family: inherit; outline: none; transition: border-color 0.15s;
+  }
+  .chat-input:focus { border-color: var(--accent); }
+  .chat-input::placeholder { color: var(--text-muted); }
+  .chat-send {
+    background: var(--accent); color: white; border: none; border-radius: 14px;
+    padding: 12px 20px; font-size: 14px; font-weight: 500; cursor: pointer;
+    font-family: inherit; transition: background 0.15s;
+  }
+  .chat-send:hover { background: var(--accent-hover); }
+  .chat-quick { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chat-quick-btn {
+    font-size: 12px; font-weight: 500; padding: 7px 14px; border-radius: 9999px;
+    border: none; background: rgba(255,255,255,0.06); color: var(--text-secondary);
+    cursor: pointer; font-family: inherit; transition: all 0.15s;
+  }
+  .chat-quick-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+  .chat-quick-btn.danger { color: var(--danger); }
+  .chat-quick-btn.danger:hover { background: rgba(229, 59, 74, 0.1); }
+
+  /* Activity */
+  .act-log { max-height: 260px; overflow-y: auto; }
+  .act-entry { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .act-entry:last-child { border-bottom: none; }
+  .act-head { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+  .act-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .act-dot.info { background: var(--accent); }
+  .act-dot.action { background: var(--success); }
+  .act-dot.forecast { background: var(--warning); }
+  .act-dot.alert { background: var(--danger); }
+  .act-time { font-size: 11px; color: var(--text-muted); margin-left: auto; }
+  .act-msg { font-size: 13px; color: var(--text-secondary); line-height: 1.55; padding-left: 15px; }
+
+  /* Transactions */
+  .tx-log { max-height: 240px; overflow-y: auto; }
+  .tx-entry { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .tx-entry:last-child { border-bottom: none; }
+  .tx-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .tx-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; flex: 1; min-width: 0; }
+  .tx-amt { font-size: 15px; font-weight: 600; white-space: nowrap; }
+  .tx-meta { font-size: 11px; color: var(--text-muted); margin-top: 3px; display: flex; gap: 8px; }
+
+  /* Footer */
+  .footer {
+    padding: 20px 0; display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: var(--text-muted);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 9999px; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .chat-msg, .act-entry, .tx-entry { animation: fadeIn 0.2s; }
+
+  @media (max-width: 1100px) { .main { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="logo">M</div>
+        <div>
+          <div class="brand-name">Meridian</div>
+          <div class="brand-sub">Treasury Agent</div>
+        </div>
+      </div>
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        Active
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero balance -->
+  <div class="hero-card">
+    <div class="hero-label">Total Assets Under Management</div>
+    <div class="hero-balance"><span class="cur">$</span><span id="total-aum">0.00</span></div>
+    <div class="hero-sub">Earning <span class="pos" id="daily-yield">$0.00</span>/day at <span id="apy-display">4.85%</span> APY</div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-label">Yield (YTD)</div>
+        <div class="hero-stat-value green" id="yield-ytd">$0</div>
+      </div>
+      <div>
+        <div class="hero-stat-label">30-Day Earnings</div>
+        <div class="hero-stat-value green" id="yield-30d">$0</div>
+      </div>
+      <div>
+        <div class="hero-stat-label">Entities</div>
+        <div class="hero-stat-value">3</div>
+      </div>
+      <div>
+        <div class="hero-stat-label">Currencies</div>
+        <div class="hero-stat-value">3</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Integrations -->
+  <div class="integrations">
+    <div class="int-pill"><span class="dot green"></span> NemoClaw Safety</div>
+    <div class="int-pill"><span class="dot blue"></span> Nemotron 3 Ultra</div>
+    <div class="int-pill"><span class="dot teal"></span> Stripe Treasury</div>
+  </div>
+
+  <!-- Main grid -->
+  <div class="main">
+
+    <!-- LEFT -->
+    <div>
+      <div style="margin-bottom: 16px;">
+        <div class="card-title" style="margin-bottom: 12px;">Entities</div>
+        <div id="entity-cards"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Liquidity</div>
+        <div id="liquidity-buffers"></div>
+      </div>
+    </div>
+
+    <!-- CENTER -->
+    <div>
+      <div class="card" style="margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <div class="card-title" style="margin-bottom: 0;">Schedule</div>
+          <div class="sched-tabs">
+            <button class="sched-tab active" data-tab="all">All</button>
+            <button class="sched-tab" data-tab="outgoing">Outgoing</button>
+            <button class="sched-tab" data-tab="incoming">Incoming</button>
+          </div>
+        </div>
+        <div id="schedule-list"></div>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div class="card-title" style="margin-bottom: 0;">Activity</div>
+          <span style="font-size: 12px; color: var(--text-muted);" id="log-count">0</span>
+        </div>
+        <div id="agent-log" class="act-log"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+      <div class="chat" style="margin-bottom: 16px;">
+        <div class="chat-head">
+          <div class="chat-avatar">T</div>
+          <div style="flex: 1;">
+            <div class="chat-name">Treasury Agent</div>
+            <div class="chat-status"><span class="status-dot" style="width:6px;height:6px;"></span> Online</div>
+          </div>
+        </div>
+        <div id="chat-messages" class="chat-msgs">
+          <div class="chat-msg chat-msg-agent">
+            <div class="chat-msg-meta">Agent</div>
+            Treasury is active. Payroll £42K due today — £4K needs pulling from stablecoin. Shall I execute?
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <div class="chat-input-row">
+            <input id="chat-input" type="text" class="chat-input" placeholder="Message your agent..." onkeydown="if(event.key==='Enter') sendChat()">
+            <button class="chat-send" onclick="sendChat()">Send</button>
+          </div>
+          <div class="chat-quick">
+            <button class="chat-quick-btn danger" onclick="quickAction('emergency')">Emergency Draw</button>
+            <button class="chat-quick-btn" onclick="quickAction('forecast')">Forecast</button>
+            <button class="chat-quick-btn" onclick="quickAction('sweep')">Sweep</button>
+            <button class="chat-quick-btn" onclick="quickAction('status')">Status</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Transactions</div>
+        <div id="tx-list" class="tx-log"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <span>Meridian Treasury · NVIDIA × Stripe × Nous Research</span>
+    <span>v2.0.0</span>
+  </div>
+
+</div>
+
+<script>
+let state = null;
+let activeTab = 'all';
+
+const EMBEDDED_STATE = {
+  "meta": {
+    "company": "Meridian Capital Partners",
+    "apy": 0.0485,
+    "total_yield_earned_30d": 8217.43,
+    "total_yield_earned_ytd": 49832.18,
+    "updated_at": "2026-06-28T14:00:00Z"
+  },
+  "entities": [
+    { "id": "ent-001", "name": "Meridian Fund I LP", "currency": "USD", "type": "fund", "role": "Primary investment vehicle", "lp_count": 47, "commitments_total": 25000000, "undrawn_capital": 6250000 },
+    { "id": "ent-002", "name": "Meridian Holdings Ltd", "currency": "EUR", "type": "holding", "role": "European holding company", "subsidiaries": 3, "jurisdiction": "Luxembourg" },
+    { "id": "ent-003", "name": "Meridian Ops UK", "currency": "GBP", "type": "operating", "role": "UK operating entity", "headcount": 28, "monthly_burn": 58000, "jurisdiction": "United Kingdom" }
+  ],
+  "balances": {
+    "ent-001": { "USD": { "fiat": 185000, "stablecoin": 420000, "yield": 1280000 } },
+    "ent-002": { "EUR": { "fiat": 92000, "stablecoin": 210000, "yield": 540000 } },
+    "ent-003": { "GBP": { "fiat": 38000, "stablecoin": 75000, "yield": 165000 } }
+  },
+  "liquidity_buffer": {
+    "ent-001": { "currency": "USD", "min_buffer": 50000, "sweep_threshold": 100000 },
+    "ent-002": { "currency": "EUR", "min_buffer": 25000, "sweep_threshold": 60000 },
+    "ent-003": { "currency": "GBP", "min_buffer": 15000, "sweep_threshold": 30000 }
+  },
+  "schedule": [
+    { "id": "sch-001", "entity": "ent-003", "title": "Payroll — June", "amount": 42000, "currency": "GBP", "due": "2026-06-28", "type": "payroll", "status": "due", "recurring": "monthly", "payee": "PayCircle", "auto_execute": true },
+    { "id": "sch-011", "entity": "ent-003", "title": "Employer NI — June", "amount": 6300, "currency": "GBP", "due": "2026-06-28", "type": "tax", "status": "due", "recurring": "monthly", "payee": "HMRC", "auto_execute": true },
+    { "id": "sch-002", "entity": "ent-002", "title": "Office Lease — Luxembourg", "amount": 18000, "currency": "EUR", "due": "2026-07-01", "type": "expense", "status": "upcoming", "recurring": "monthly", "payee": "Regus", "auto_execute": true },
+    { "id": "sch-007", "entity": "ent-001", "title": "SaaS Subscriptions — July", "amount": 4200, "currency": "USD", "due": "2026-07-01", "type": "expense", "status": "upcoming", "recurring": "monthly", "payee": "Bloomberg, Notion, Vercel", "auto_execute": true },
+    { "id": "sch-009", "entity": "ent-002", "title": "Management Fees Q3", "amount": 310000, "currency": "EUR", "due": "2026-07-01", "type": "incoming", "status": "upcoming", "recurring": "quarterly", "source": "47 LPs" },
+    { "id": "sch-003", "entity": "ent-001", "title": "Bridge Loan Repayment — Helix Bio", "amount": 250000, "currency": "USD", "due": "2026-07-05", "type": "loan", "status": "upcoming", "recurring": "one-time", "payee": "Helix BioSciences", "auto_execute": false, "requires_approval": true },
+    { "id": "sch-010", "entity": "ent-001", "title": "Capital Call LP-047", "amount": 750000, "currency": "USD", "due": "2026-07-08", "type": "incoming", "status": "upcoming", "recurring": "one-time", "source": "Wellington Family Office" },
+    { "id": "sch-004", "entity": "ent-001", "title": "LP Distribution Q2", "amount": 450000, "currency": "USD", "due": "2026-07-10", "type": "distribution", "status": "upcoming", "recurring": "quarterly", "payee": "47 LPs", "auto_execute": false, "requires_approval": true },
+    { "id": "sch-005", "entity": "ent-003", "title": "Corporation Tax Q2", "amount": 28000, "currency": "GBP", "due": "2026-07-15", "type": "tax", "status": "upcoming", "recurring": "quarterly", "payee": "HMRC", "auto_execute": true },
+    { "id": "sch-006", "entity": "ent-002", "title": "Performance Bonus Pool", "amount": 85000, "currency": "EUR", "due": "2026-07-20", "type": "bonus", "status": "upcoming", "recurring": "annual", "payee": "12 staff", "auto_execute": false, "requires_approval": true },
+    { "id": "sch-012", "entity": "ent-001", "title": "Audit Fee — Q2", "amount": 35000, "currency": "USD", "due": "2026-07-25", "type": "expense", "status": "upcoming", "recurring": "quarterly", "payee": "Deloitte", "auto_execute": true },
+    { "id": "sch-008", "entity": "ent-003", "title": "Payroll — July", "amount": 42000, "currency": "GBP", "due": "2026-07-28", "type": "payroll", "status": "upcoming", "recurring": "monthly", "payee": "PayCircle", "auto_execute": true }
+  ],
+  "transactions": [
+    { "id": "tx-1001", "timestamp": "2026-06-27T09:15:00Z", "entity": "ent-001", "type": "yield_sweep", "description": "Swept $135K fiat to yield", "amount": -135000, "currency": "USD", "nemoclaw_hash": "a3f8c91d2e7b" },
+    { "id": "tx-1002", "timestamp": "2026-06-27T09:15:00Z", "entity": "ent-001", "type": "yield_sweep", "description": "Swept $80K USDC to yield", "amount": -80000, "currency": "USD", "nemoclaw_hash": "b7e2f04a1c9d" },
+    { "id": "tx-1003", "timestamp": "2026-06-26T14:30:00Z", "entity": "ent-002", "type": "conversion", "description": "EUR to USDC for yield", "amount": -50000, "currency": "EUR", "nemoclaw_hash": "c1d5e83b4f6a" },
+    { "id": "tx-1004", "timestamp": "2026-06-25T08:00:00Z", "entity": "ent-003", "type": "incoming", "description": "Client retainer — Q3 advisory", "amount": 15000, "currency": "GBP", "nemoclaw_hash": "d9a3f7c2e1b4" },
+    { "id": "tx-1005", "timestamp": "2026-06-24T11:45:00Z", "entity": "ent-001", "type": "yield_earnings", "description": "Daily yield accrual on $1.28M", "amount": 169.86, "currency": "USD", "nemoclaw_hash": "auto" },
+    { "id": "tx-1008", "timestamp": "2026-06-23T16:20:00Z", "entity": "ent-003", "type": "payment", "description": "Office supplies — Amazon UK", "amount": -2340.50, "currency": "GBP", "nemoclaw_hash": "e4b7c1d9f3a2" },
+    { "id": "tx-1009", "timestamp": "2026-06-22T10:00:00Z", "entity": "ent-001", "type": "incoming", "description": "Capital call — LP-046", "amount": 500000, "currency": "USD", "nemoclaw_hash": "f2c8d6e4b1a7" },
+    { "id": "tx-1010", "timestamp": "2026-06-22T10:05:00Z", "entity": "ent-001", "type": "conversion", "description": "Auto-convert $500K to USDC", "amount": -500000, "currency": "USD", "nemoclaw_hash": "a1d5e9c3f8b4" },
+    { "id": "tx-1011", "timestamp": "2026-06-21T12:00:00Z", "entity": "ent-001", "type": "payment", "description": "Bloomberg Terminal — June", "amount": -2400, "currency": "USD", "nemoclaw_hash": "b9e4f7a2c1d3" },
+    { "id": "tx-1012", "timestamp": "2026-06-20T09:30:00Z", "entity": "ent-002", "type": "payment", "description": "Legal fees — Linklaters", "amount": -45000, "currency": "EUR", "nemoclaw_hash": "c3a7e1f9d4b8" }
+  ],
+  "agent_log": [
+    { "id": "log-001", "timestamp": "2026-06-28T14:00:00Z", "type": "info", "message": "Treasury agent v2.0.0 active. Monitoring 3 entities, 3 currencies. AUM: $3.15M. NemoClaw safety online. Nemotron 3 Ultra configured." },
+    { "id": "log-002", "timestamp": "2026-06-27T09:15:00Z", "type": "action", "message": "Swept $135K + $80K USDC to yield. Retained $50K buffer. NemoClaw: all checks passed." },
+    { "id": "log-003", "timestamp": "2026-06-26T14:30:00Z", "type": "action", "message": "Converted EUR 50K to USDC for yield. NemoClaw: off-hours monitored." },
+    { "id": "log-004", "timestamp": "2026-06-26T08:00:00Z", "type": "forecast", "message": "Payroll GBP 42K due today. GBP fiat: 38K. Will pull 4K from stablecoin." },
+    { "id": "log-005", "timestamp": "2026-06-25T17:00:00Z", "type": "info", "message": "EUR 310K management fees (Q3) scheduled Jul 1. Will convert 60% to USDC." },
+    { "id": "log-006", "timestamp": "2026-06-24T11:45:00Z", "type": "info", "message": "Daily yield: $263.52 across 3 entities. 30-day: $8,217. YTD: $49,832." },
+    { "id": "log-007", "timestamp": "2026-06-22T10:05:00Z", "type": "action", "message": "Auto-converted $500K capital call (LP-046) to USDC. NemoClaw: flagged." },
+    { "id": "log-008", "timestamp": "2026-06-21T12:00:00Z", "type": "action", "message": "Bloomberg Terminal paid via Stripe Link SPT ($2,400)." }
+  ]
+};
+
+const sym = { USD: '$', EUR: '€', GBP: '£' };
+const fmt = (n, cur='USD') => (sym[cur]||'$') + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtShort = (n, cur='USD') => {
+  const s = sym[cur]||'$';
+  if (Math.abs(n) >= 1e6) return s + (n/1e6).toFixed(2) + 'M';
+  if (Math.abs(n) >= 1e3) return s + (n/1e3).toFixed(1) + 'K';
+  return s + n.toFixed(0);
+};
+const fmtDate = (d) => {
+  const date = new Date(d);
+  const today = new Date('2026-06-28');
+  const diff = Math.ceil((date - today) / 86400000);
+  if (diff === 0) return 'Today';
+  if (diff === 1) return 'Tomorrow';
+  if (diff < 0) return `${Math.abs(diff)}d ago`;
+  if (diff < 7) return `in ${diff}d`;
+  return date.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+};
+
+async function loadState() {
+  try { const r = await fetch('treasury_state.json'); if (r.ok) { state = await r.json(); render(); return; } } catch(e) {}
+  try { const r = await fetch('/api/state'); if (r.ok) { state = await r.json(); render(); return; } } catch(e) {}
+  state = EMBEDDED_STATE; render();
+}
+
+async function runAgentCommand(cmd) {
+  try {
+    const r = await fetch('/api/run?cmd=' + encodeURIComponent(cmd));
+    if (r.ok) { const d = await r.json(); if (d.state) { state = d.state; render(); } return d.output || 'Done.'; }
+  } catch(e) {}
+  return null;
+}
+
+function render() { renderHero(); renderEntities(); renderLiquidity(); renderSchedule(); renderLog(); renderTransactions(); }
+
+function renderHero() {
+  let total = 0;
+  const rates = { USD: 1, EUR: 1.082, GBP: 1.27 };
+  state.entities.forEach(ent => {
+    const b = state.balances[ent.id];
+    Object.keys(b).forEach(c => { total += (b[c].fiat + b[c].stablecoin + b[c].yield) * rates[c]; });
+  });
+  document.getElementById('total-aum').textContent = total.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  document.getElementById('apy-display').textContent = (state.meta.apy * 100).toFixed(2) + '%';
+  document.getElementById('daily-yield').textContent = fmt(total * state.meta.apy / 365, 'USD');
+  document.getElementById('yield-ytd').textContent = state.meta.total_yield_earned_ytd ? fmtShort(state.meta.total_yield_earned_ytd, 'USD') : '—';
+  document.getElementById('yield-30d').textContent = state.meta.total_yield_earned_30d ? fmtShort(state.meta.total_yield_earned_30d, 'USD') : '—';
+}
+
+function renderEntities() {
+  document.getElementById('entity-cards').innerHTML = state.entities.map(ent => {
+    const b = state.balances[ent.id][ent.currency];
+    const total = b.fiat + b.stablecoin + b.yield;
+    let meta = '';
+    if (ent.type === 'fund') meta = `${ent.lp_count} LPs · ${fmtShort(ent.commitments_total, 'USD')} committed · ${fmtShort(ent.undrawn_capital, 'USD')} undrawn`;
+    else if (ent.type === 'holding') meta = `${ent.subsidiaries} subsidiaries · ${ent.jurisdiction}`;
+    else if (ent.type === 'operating') meta = `${ent.headcount} staff · ${fmtShort(ent.monthly_burn, ent.currency)}/mo burn · ${ent.jurisdiction}`;
+    return `<div class="entity">
+      <div class="entity-top"><span class="entity-type">${ent.type}</span><span class="entity-cur num">${ent.currency}</span></div>
+      <div class="entity-name">${ent.name}</div>
+      <div class="entity-role">${ent.role}</div>
+      <div class="entity-total num">${fmt(total, ent.currency)}</div>
+      <div class="entity-parts num"><span><span class="v">${fmtShort(b.fiat, ent.currency)}</span> fiat</span><span><span class="v">${fmtShort(b.stablecoin, ent.currency)}</span> USDC</span><span><span class="v">${fmtShort(b.yield, ent.currency)}</span> yield</span></div>
+      <div class="entity-meta">${meta}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderLiquidity() {
+  document.getElementById('liquidity-buffers').innerHTML = state.entities.map(ent => {
+    const buf = state.liquidity_buffer[ent.id];
+    const b = state.balances[ent.id][ent.currency];
+    const avail = b.fiat + b.stablecoin;
+    const pct = Math.min(100, (avail / buf.sweep_threshold) * 100);
+    const st = avail < buf.min_buffer ? 'danger' : avail < buf.sweep_threshold ? 'warn' : 'ok';
+    const colors = { ok: 'var(--success)', warn: 'var(--warning)', danger: 'var(--danger)' };
+    const labels = { ok: 'Healthy', warn: 'Low', danger: 'Critical' };
+    return `<div class="liq-row">
+      <div class="liq-top"><span class="liq-name">${ent.name}</span><span class="liq-status" style="color:${colors[st]}">${labels[st]}</span></div>
+      <div class="liq-bar"><div class="liq-fill" style="width:${pct}%;background:${colors[st]}"></div></div>
+      <div class="liq-detail num"><span>${fmt(avail, ent.currency)}</span><span>buffer ${fmt(buf.min_buffer, ent.currency)}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function renderSchedule() {
+  const items = state.schedule.filter(s => {
+    if (activeTab === 'all') return true;
+    if (activeTab === 'outgoing') return s.type !== 'incoming';
+    if (activeTab === 'incoming') return s.type === 'incoming';
+  }).sort((a,b) => new Date(a.due) - new Date(b.due));
+
+  const tl = { payroll: 'PR', expense: 'EX', loan: 'LN', distribution: 'DI', tax: 'TX', bonus: 'BN', incoming: 'IN' };
+
+  document.getElementById('schedule-list').innerHTML = items.map(s => {
+    const ent = state.entities.find(e => e.id === s.entity);
+    const inc = s.type === 'incoming';
+    const color = inc ? 'var(--success)' : s.status === 'due' ? 'var(--danger)' : 'var(--text-primary)';
+    const cls = inc ? 'incoming' : s.status === 'due' ? 'due' : '';
+    const ab = s.auto_execute && !s.requires_approval ? '<span class="badge badge-auto">auto</span>' : '';
+    const pb = s.requires_approval ? '<span class="badge badge-approval">approval</span>' : '';
+    const flow = s.payee ? `→ ${s.payee}` : s.source ? `← ${s.source}` : '';
+    return `<div class="sched-item ${cls}">
+      <div class="sched-icon">${tl[s.type] || '—'}</div>
+      <div class="sched-body"><div class="sched-title">${s.title}${ab}${pb}</div><div class="sched-meta">${ent ? ent.name : ''} · ${flow}</div></div>
+      <div class="sched-right"><div class="sched-amt num" style="color:${color}">${inc?'+':'−'}${fmt(s.amount, s.currency)}</div><div class="sched-date num">${fmtDate(s.due)}</div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderLog() {
+  document.getElementById('agent-log').innerHTML = state.agent_log.slice(0, 8).map(log => {
+    const t = new Date(log.timestamp);
+    return `<div class="act-entry"><div class="act-head"><span class="act-dot ${log.type}"></span><span class="act-time">${t.toLocaleDateString('en-US',{month:'short',day:'numeric'})} ${t.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}</span></div><div class="act-msg">${log.message}</div></div>`;
+  }).join('');
+  document.getElementById('log-count').textContent = state.agent_log.length;
+}
+
+function renderTransactions() {
+  document.getElementById('tx-list').innerHTML = state.transactions.slice(0, 10).map(tx => {
+    const inc = tx.amount > 0;
+    const color = inc ? 'var(--success)' : 'var(--text-primary)';
+    return `<div class="tx-entry">
+      <div class="tx-row"><div class="tx-desc">${tx.description}</div><div class="tx-amt num" style="color:${color}">${inc?'+':''}${fmtShort(tx.amount, tx.currency)}</div></div>
+      <div class="tx-meta num"><span>${tx.type.replace(/_/g,' ')}</span>${tx.nemoclaw_hash && tx.nemoclaw_hash !== 'auto' ? `<span>${tx.nemoclaw_hash}</span>` : ''}<span>${new Date(tx.timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span></div>
+    </div>`;
+  }).join('');
+}
+
+document.querySelectorAll('.sched-tab').forEach(el => {
+  el.addEventListener('click', () => {
+    document.querySelectorAll('.sched-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active'); activeTab = el.dataset.tab; renderSchedule();
+  });
+});
+
+function addChat(text, isAgent=true) {
+  const c = document.getElementById('chat-messages');
+  const d = document.createElement('div');
+  d.className = 'chat-msg ' + (isAgent ? 'chat-msg-agent' : 'chat-msg-user');
+  d.innerHTML = `<div class="chat-msg-meta">${isAgent?'Agent':'You'}</div>${text}`;
+  c.appendChild(d); c.scrollTop = c.scrollHeight;
+}
+
+function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  addChat(text, false); input.value = '';
+  setTimeout(() => respondToChat(text), 500);
+}
+
+async function respondToChat(text) {
+  const t = text.toLowerCase();
+  
+  // Use the parse command which handles both keyword matching and Nemotron fallback
+  // This is a single API call that parses + executes in one subprocess
+  addChat('Processing...', true);
+  
+  const out = await runAgentCommand('parse ' + text);
+  const c = document.getElementById('chat-messages');
+  if (c.lastChild && c.lastChild.textContent.includes('Processing')) c.lastChild.remove();
+  
+  if (out !== null && out.trim() && !out.includes('PARSING_UNAVAILABLE')) {
+    const html = out.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')
+      .replace(/✅/g,'<span style="color:var(--success)">✅</span>')
+      .replace(/🚫/g,'<span style="color:var(--danger)">🚫</span>')
+      .replace(/⚠️/g,'<span style="color:var(--warning)">⚠️</span>')
+      .replace(/↗/g,'<span style="color:var(--success)">↗</span>')
+      .replace(/🛡️/g,'<span style="color:var(--accent)">🛡️</span>')
+      .replace(/🧠/g,'<span style="color:var(--accent)">🧠</span>');
+    addChat(html);
+  } else {
+    addChat('Treasury active. What would you like me to do?');
+  }
+}
+
+function quickAction(type) {
+  const msgs = { emergency: 'Emergency draw $50K', forecast: 'Give me a liquidity forecast', sweep: 'Sweep all idle balances', status: 'Treasury status' };
+  document.getElementById('chat-input').value = msgs[type];
+  sendChat();
+}
+
+loadState();
+setInterval(loadState, 5000);
+</script>
+</body>
+</html>

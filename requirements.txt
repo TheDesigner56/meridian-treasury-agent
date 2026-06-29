@@ -1,0 +1,2 @@
+# Meridian Treasury Agent — Python dependencies for Vercel serverless functions
+# No external dependencies — uses only stdlib

@@ -4,31 +4,35 @@ Returns the current treasury state as JSON.
 """
 import json
 import os
-from http.server import BaseHTTPRequestHandler
+from typing import Dict, Any
 
-def handler(req):
+def handler(request):
     """Handle GET /api/state — return treasury state."""
-    # In production, this would read from a database or the engine
-    # For the demo, we read from the state file bundled with the deployment
-    state_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'demo-data', 'treasury_state.json')
+    # Try multiple paths — works for both local dev and Vercel
+    possible_paths = [
+        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'demo-data', 'treasury_state.json'),
+        os.path.join(os.getcwd(), 'demo-data', 'treasury_state.json'),
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), 'demo-data', 'treasury_state.json'),
+    ]
     
-    try:
-        with open(state_path, 'r') as f:
-            state = json.load(f)
-        return {
-            'statusCode': 200,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            'body': json.dumps(state)
-        }
-    except Exception as e:
-        return {
-            'statusCode': 500,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            'body': json.dumps({'error': str(e)})
-        }
+    for state_path in possible_paths:
+        try:
+            with open(state_path, 'r') as f:
+                state = json.load(f)
+            return {
+                'statusCode': 200,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                },
+                'body': json.dumps(state)
+            }
+        except:
+            continue
+    
+    return {
+        'statusCode': 404,
+        'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+        'body': json.dumps({'error': 'State file not found'})
+    }
